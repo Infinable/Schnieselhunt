@@ -1,7 +1,9 @@
 package com.android.highlifestudio.schnieselhunt;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Service;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -107,8 +109,10 @@ public class GPSService extends Service implements GoogleApiClient.OnConnectionF
     }
 
     public void displayGPSSettingsDialog(){
-        Intent intent=new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-        startActivity(intent);
+        Intent i=new Intent(this,DialogActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+
     }
 
 
