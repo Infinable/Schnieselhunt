@@ -12,6 +12,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -31,21 +32,33 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 
 public class GPSService extends Service implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LocationListener {
     private final String LOG_TAG = "GPSService";
+    static final String LOCATION_UPDATE="SLocation update";
+    boolean running=false;
 
     private final long LOCATION_REQUEST_INTERVAL = 1000;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
 
-    private boolean gps=false;
+
 
     @Override
     public void onCreate() {
-        mGoogleApiClient = new GoogleApiClient.Builder(this).
-                addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
-        mGoogleApiClient.connect();
+        super.onCreate();
+        running=false;
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if(!running) {
+            running=true;
+            mGoogleApiClient = new GoogleApiClient.Builder(this).
+                    addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
@@ -95,14 +108,11 @@ public class GPSService extends Service implements GoogleApiClient.OnConnectionF
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.d(LOG_TAG,"Google API Connection failed");
     }
-    public void setGPS(boolean value){
-        gps=value;
-        return;
-    }
 
     @Override
     public void onLocationChanged(Location location) {
-        Intent i=new Intent(GPSActivity.LOCATION_UPDATE);
+        Intent i=new Intent(LOCATION_UPDATE);
+        i.putExtra("Location",location);
         i.putExtra("Latitude",String.valueOf(location.getLatitude()));
         i.putExtra("Longitude",String.valueOf(location.getLongitude()));
         sendBroadcast(i);

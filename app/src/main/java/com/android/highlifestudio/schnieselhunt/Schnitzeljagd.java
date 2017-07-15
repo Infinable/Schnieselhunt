@@ -3,20 +3,35 @@ package com.android.highlifestudio.schnieselhunt;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Schnitzeljagd implements Parcelable{
-    String name, startpunkt, zeit, entfernung, zuletztGespielt;
-    Schnitzeljagd(String name, String startpunkt, String zeit, String entfernung, String zuletztGespielt){
+import java.io.Serializable;
+import java.util.ArrayList;
+
+/**
+ * Schnitzeljagd-Object
+ * contains mostly general Infos to the Schnitzeljagd and
+ * contains the List of Lcoations in which the riddles and
+ * associated pictures are
+ */
+public class Schnitzeljagd implements Parcelable, Serializable{
+    private final static long serialVersionUID= 42L;
+    String name, startpunkt, zeit, entfernung, zuletztGespielt,difficulty;
+    ArrayList<SLocation> SLocationArrayList;
+    Schnitzeljagd(String name, String startpunkt, String zeit, String entfernung, String zuletztGespielt,String difficulty, ArrayList<SLocation> SLocationArrayList){
         this.name=name;
         this.startpunkt = startpunkt;
         this.zeit=zeit;this.entfernung=entfernung;this.zuletztGespielt=zuletztGespielt;
+        this.SLocationArrayList = SLocationArrayList;
     }
+
 
     public Schnitzeljagd(Parcel in) {
         name=in.readString();
         startpunkt =in.readString();
         zeit=in.readString();
+        difficulty=in.readString();
         entfernung=in.readString();
         zuletztGespielt=in.readString();
+        SLocationArrayList =in.readArrayList(SLocation.class.getClassLoader());
     }
 
     @Override
@@ -31,6 +46,8 @@ public class Schnitzeljagd implements Parcelable{
         dest.writeString(this.zeit);
         dest.writeString(this.entfernung);
         dest.writeString(this.zuletztGespielt);
+        dest.writeString(this.difficulty);
+        dest.writeList(SLocationArrayList);
     }
     public static final Parcelable.Creator<Schnitzeljagd>CREATOR= new Parcelable.Creator<Schnitzeljagd>(){
         public Schnitzeljagd createFromParcel(Parcel in){
@@ -41,6 +58,9 @@ public class Schnitzeljagd implements Parcelable{
         }
     };
 
+    public ArrayList<SLocation> getSLocationArrayList(){
+        return SLocationArrayList;
+    }
     public String getName() {
         return name;
     }

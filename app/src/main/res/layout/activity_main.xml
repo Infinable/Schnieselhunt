@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/CustomTheme"
     android:background="@drawable/main_screen"
     tools:context="com.android.highlifestudio.schnieselhunt.MainActivity">
 
@@ -13,7 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-
+        android:background="@color/colorThird"
+        android:theme="@style/MyStyle"
         android:layout_marginBottom="69dp"
         android:width="100dp"
         android:text="@string/start_button"

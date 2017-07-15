@@ -1,26 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
     android:layout_height="match_parent"
+    android:weightSum="2"
+    android:theme="@style/CustomTheme"
+    android:background="@drawable/nature5"
     tools:context="com.android.highlifestudio.schnieselhunt.MenuActivity">
 
-    <Button
-        android:id="@+id/selection_button"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="191dp"
-        android:text="@string/start_jagd" />
+        android:padding="16dp">
+        <Button
+            android:id="@+id/selection_button"
+            android:theme="@style/MyStyle"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/start_jagd" />
+    </LinearLayout>
 
-    <Button
-        android:id="@+id/add_button"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/selection_button"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp"
-        android:text="@string/add_button" />
-</RelativeLayout>
+        android:padding="16dp">
+        <Button
+            android:theme="@style/MyStyle"
+            android:id="@+id/add_button"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="wrap_content"
+            android:text="@string/add_button" />
+    </LinearLayout>
+
+</LinearLayout>

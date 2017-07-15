@@ -4,9 +4,11 @@ import android.*;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -43,19 +45,15 @@ public class SelectionActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         setContentView(R.layout.activity_selection);
         View v =this.findViewById(android.R.id.content);
-        Log.d("STATE",Environment.getExternalStorageState());
         path= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Schnieseljagd");
-        Log.d("Path",path.toString());
-        Log.d("Path",path.getAbsolutePath());
-        Log.d("Path",path.getName());
         String file_name ="Schnitzeljagden.txt";
         file=new File(path,file_name);
         if(!path.mkdirs())
             Log.e("tag","path not created");
-        liste=new ArrayList<Schnitzeljagd>();
-        file=new File(path,file_name);
-        write(v);
-        read(v);
+        liste=SchnitzeljagdApp.Schnitzeljagdlist;
+        //file=new File(path,file_name);
+        //write(v);
+        //read(v);
         createMenu(v);
     }
     public void write(View view){
@@ -95,8 +93,8 @@ public class SelectionActivity extends AppCompatActivity {
                 String attr[]=line.split(",");
                 Log.d("tag", "Testpunkt5");
                 try {
-                    if (attr.length > 1 && attr[0] != null && attr[1] != null && attr[2] != null && attr[3] != null && attr[4] != null)
-                        liste.add(new Schnitzeljagd(attr[0], attr[1], attr[2], attr[3], attr[4]));
+                    if (attr.length > 1 && attr[0] != null && attr[1] != null && attr[2] != null && attr[3] != null && attr[4] != null);
+                        //liste.add(new Schnitzeljagd(attr[0], attr[1], attr[2], attr[3], attr[4]));
                 }
                 catch (ArrayIndexOutOfBoundsException e) {
                     Toast.makeText(this, "mach deine File richtig!"+ e.toString(), Toast.LENGTH_SHORT).show();
@@ -119,6 +117,7 @@ public class SelectionActivity extends AppCompatActivity {
      */
     public void createMenu(View v){
         LinearLayout rl =new LinearLayout(this);
+        //rl.setBackgroundResource(R.drawable.nature2);
         rl.setOrientation(LinearLayout.VERTICAL);
         ScrollView scrollView=new ScrollView(this);
         scrollView.addView(rl);
@@ -127,7 +126,8 @@ public class SelectionActivity extends AppCompatActivity {
         for(int i=0; i<liste.size();i++) {
             final Schnitzeljagd s=liste.get(i);
 
-            view = new Button(this);
+            view = new Button(new ContextThemeWrapper(this,R.style.MyStyle));
+            view.setBackgroundColor(0xFF3A4B4F);
             view.setText(s.getName());
             view.setId(id);
 
@@ -135,7 +135,7 @@ public class SelectionActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                    Intent i= new Intent(SelectionActivity.this, InfoActivity.class);
-                    i.putExtra("Schnitzeljagd",s);
+                    i.putExtra("Schnitzeljagd",(Parcelable)s);
                     startActivity(i);
                 }
             });

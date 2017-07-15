@@ -14,9 +14,9 @@ public class DialogActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setMessage("Gps is disabled. Would you like to enable it?")
+        alertDialogBuilder.setMessage("Gps ist ausgeschaltet. Möchtest du es einschalten?")
                 .setCancelable(false)
-                .setPositiveButton("Go to GPS Settings", new DialogInterface.OnClickListener() {
+                .setPositiveButton("Zu den GPS-Einstellungen", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
@@ -25,7 +25,7 @@ public class DialogActivity extends AppCompatActivity {
 
                     }
                 });
-        alertDialogBuilder.setNegativeButton("Return",
+        alertDialogBuilder.setNegativeButton("Zurückkehren",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

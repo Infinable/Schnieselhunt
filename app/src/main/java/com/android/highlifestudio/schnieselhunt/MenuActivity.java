@@ -28,7 +28,7 @@ public class MenuActivity extends AppCompatActivity {
                     startActivity(menuToSelection);
                     break;
                 case R.id.add_button:
-                    Intent menuToAdd = new Intent(MenuActivity.this, AddActivity.class);
+                    Intent menuToAdd = new Intent(MenuActivity.this, GeneralSchnitzeljagdAddActivity.class);
                     startActivity(menuToAdd);
                     break;
             }
