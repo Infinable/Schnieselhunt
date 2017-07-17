@@ -1,7 +1,10 @@
 package com.android.highlifestudio.schnieselhunt;
 
+import android.*;
 import android.app.Application;
+import android.content.Context;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import java.io.File;
@@ -25,11 +28,13 @@ public class SchnitzeljagdApp extends Application {
     public static String filename="Schnitzeljagden.srl";
 
     public static ArrayList<Schnitzeljagd> Schnitzeljagdlist;
+    static Context context;
 
     @Override
     public void onCreate() {
         super.onCreate();
         readFiles();
+        context=getApplicationContext();
     }
 
     public static void readFiles(){
