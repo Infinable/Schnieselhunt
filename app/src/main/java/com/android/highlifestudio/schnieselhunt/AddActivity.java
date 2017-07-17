@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -74,6 +75,8 @@ public class AddActivity extends AppCompatActivity {
         edit.putInt("Value",0);
         edit.commit();
 
+        StrictMode.VmPolicy.Builder builder= new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
         initWidgets();
@@ -106,22 +109,21 @@ public class AddActivity extends AppCompatActivity {
                 Intent takePic=new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 photoFile=null;
                 int count=pref.getInt("value",0);
+
                 imageName=getIntent().getStringExtra("name")+(count)++;
+                Log.d(LOG_TAG,"Count: "+count+"Image name: "+imageName);
                 edit.putInt("value",count);
 
+                Log.d(LOG_TAG,imageName);
+                photoFile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),imageName+".jpg");
+                path=photoFile.getAbsolutePath();
+                Log.d(LOG_TAG,path);
 
-                try{
-                    photoFile=File.createTempFile(imageName,".jpg",Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES));
-                    path=photoFile.getAbsolutePath();
-                    Log.d(LOG_TAG,path);
-                }
-                catch (IOException ex) {
-                    Log.e(LOG_TAG, ex.toString());
-                }
+
                 if(takePic.resolveActivity(getPackageManager())!=null)
                     if(photoFile!=null) {
-                        Uri photoURI= FileProvider.getUriForFile(AddActivity.this,"com.android.highlifestudio.schnieselhunt.fileprovider",photoFile);
-                        takePic.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                        //Uri photoURI= Uri.fromFile(photoFile);
+                        takePic.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                         startActivityForResult(takePic, REQUEST_IMAGE_CAPTURE);
                     }
                 }
