@@ -37,6 +37,7 @@ public class GPSActivity extends AppCompatActivity
     Schnitzeljagd s;
     ArrayList<SLocation> SLocationArrayList;
     SLocation currRiddleLoc;
+    Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,7 +105,9 @@ public class GPSActivity extends AppCompatActivity
             broadcastReceiver= new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
+
                     Bundle b=intent.getExtras();
+                    location=b.getParcelable("Location");
                     latitudeText.setText(b.getString("Latitude"));
                     longitudeText.setText(b.getString("Longitude"));
                     SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
