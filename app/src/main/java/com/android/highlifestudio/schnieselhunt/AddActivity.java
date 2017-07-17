@@ -115,7 +115,10 @@ public class AddActivity extends AppCompatActivity {
                 edit.putInt("value",count);
 
                 Log.d(LOG_TAG,imageName);
-                photoFile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),imageName+".jpg");
+                File folder= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Schnieselhunt");
+                folder.mkdir();
+                Log.d(LOG_TAG,folder.getAbsolutePath());
+                photoFile=new File(folder,imageName+count+".jpg");
                 path=photoFile.getAbsolutePath();
                 Log.d(LOG_TAG,path);
 
