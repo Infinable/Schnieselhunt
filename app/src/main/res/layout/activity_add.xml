@@ -70,7 +70,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="0.5"
                     android:gravity="top"
-                    android:hint="Rätseltext: Hier das Rätsel für die aktuelle Position eingeben, die der Nutzer beantworten soll" />
+                    android:hint="Rätseltext: Gib dem Benutzer einen kleinen Hinweis, wie er deinen Ort auffinden kann. Füge optional ein Bild hinzu, um es den Spielern deiner Schnitzeljagd einfacher zu machen" />
 
 
                 <ImageView

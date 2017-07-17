@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -13,11 +15,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -38,6 +45,10 @@ public class GPSActivity extends AppCompatActivity
     ArrayList<SLocation> SLocationArrayList;
     SLocation currRiddleLoc;
     Location location;
+    LinearLayout linearLayout;
+    TextView rätseltext;
+    ImageView rätselImage;
+    int counter=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,7 @@ public class GPSActivity extends AppCompatActivity
 
         s=getIntent().getExtras().getParcelable("Schnitzeljagd");
         SLocationArrayList =s.getSLocationArrayList();
+        linearLayout=(LinearLayout) findViewById(R.id.mainlayout);
 
         Log.d("tag",s.getSLocationArrayList().get(0).rätseltext);
         Iterator<SLocation> listIt;
@@ -62,7 +74,16 @@ public class GPSActivity extends AppCompatActivity
         latitudeText= (TextView) findViewById(R.id.latitudeText);
         longitudeText= (TextView)findViewById(R.id.longitudeText);
         prompt=(TextView)findViewById(R.id.moveToLocationPrompt);
-        prompt.setText("Please move to the next Location:\nLongitude "+currRiddleLoc.longitude+"\nLatitude: "+currRiddleLoc.latitude);
+        rätselImage=(ImageView) findViewById(R.id.Rätselimage);
+        rätseltext=(TextView) findViewById(R.id.Rätseltext);
+        rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
+        File imgFile=null;
+        if(SLocationArrayList.get(counter).picpath!=null)
+        imgFile=new File(SLocationArrayList.get(counter).picpath);
+        if(imgFile.exists()){
+            Bitmap bitmap= BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            rätselImage.setImageBitmap(bitmap);
+        }
 
     }
 

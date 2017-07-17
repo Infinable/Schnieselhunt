@@ -28,12 +28,14 @@ public class SLocation implements Parcelable,Serializable{
     }
     protected SLocation(Parcel in) {
         rätseltext = in.readString();
+        picpath=in.readString();
         longitude = in.readDouble();
         latitude= in.readDouble();
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(rätseltext);
+        dest.writeString(picpath);
         dest.writeDouble(longitude);
         dest.writeDouble(latitude);
     }
