@@ -3,6 +3,7 @@ package com.android.highlifestudio.schnieselhunt;
 import android.*;
 import android.app.Application;
 import android.content.Context;
+import android.location.Location;
 import android.os.Environment;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;

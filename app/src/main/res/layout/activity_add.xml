@@ -23,7 +23,7 @@
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:weightSum="1.5">
+                android:weightSum="1">
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -71,13 +71,7 @@
                     android:layout_weight="0.5"
                     android:gravity="top"
                     android:hint="Rätseltext: Hier das Rätsel für die aktuelle Position eingeben, die der Nutzer beantworten soll" />
-                <EditText
-                    android:id="@+id/answertext"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="0.5"
-                    android:gravity="top"
-                    android:hint="Rätseltext: Hier die Antwort für das Rätsel eingeben" />
+
 
                 <ImageView
                     android:layout_width="match_parent"
