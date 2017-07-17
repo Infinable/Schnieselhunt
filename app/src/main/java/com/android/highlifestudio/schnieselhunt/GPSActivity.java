@@ -36,7 +36,6 @@ public class GPSActivity extends AppCompatActivity
     static final int PERMISSION_ACCESS_FINE_LOCATION=1;
     static final String LOG_TAG="GPSActivity";
 
-
     private BroadcastReceiver broadcastReceiver;
     TextView latitudeText;
     TextView longitudeText;
@@ -49,6 +48,7 @@ public class GPSActivity extends AppCompatActivity
     TextView rätseltext;
     ImageView rätselImage;
     int counter=0;
+    int maxLength = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +58,7 @@ public class GPSActivity extends AppCompatActivity
         s=getIntent().getExtras().getParcelable("Schnitzeljagd");
         SLocationArrayList =s.getSLocationArrayList();
         linearLayout=(LinearLayout) findViewById(R.id.mainlayout);
+        maxLength = SLocationArrayList.size()-1;
 
         Log.d("tag",s.getSLocationArrayList().get(0).rätseltext);
         Iterator<SLocation> listIt;
@@ -87,6 +88,24 @@ public class GPSActivity extends AppCompatActivity
 
     }
 
+    private boolean checkLocation(Location l, int a){
+        float accuracy = l.getAccuracy();
+        Location temp = new Location("");
+        temp.setLatitude(SLocationArrayList.get(counter).latitude);
+        temp.setLongitude(SLocationArrayList.get(counter).longitude);
+        float distance = l.distanceTo(temp);
+        Log.d("haha", String.valueOf(accuracy));
+
+        if (distance < (accuracy + (accuracy/2))){
+            return true;
+        }
+
+        return false;
+    }
+
+    private void refreshLayout(){
+
+    }
 
 
     static final int PLAY_SERVICES_RESOLUTION_REQUEST=9000;
@@ -133,6 +152,13 @@ public class GPSActivity extends AppCompatActivity
                     longitudeText.setText(b.getString("Longitude"));
                     SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
                     SchnitzeljagdApp.latitude=Double.valueOf(b.getString("Latitude"));
+                    if (counter > maxLength)
+                        return;
+                    else if (checkLocation(location, counter)){
+                        counter++;
+                        refreshLayout();
+                    }
+
                 }
             };
             registerReceiver(broadcastReceiver,new IntentFilter(GPSService.LOCATION_UPDATE));
