@@ -14,19 +14,20 @@ import java.util.ArrayList;
  */
 public class Schnitzeljagd implements Parcelable, Serializable{
     private final static long serialVersionUID= 42L;
-    String name, startpunkt, zeit, entfernung, zuletztGespielt,difficulty;
+    String name, beschreibung, zeit, entfernung, zuletztGespielt,difficulty;
     ArrayList<SLocation> SLocationArrayList;
-    Schnitzeljagd(String name, String startpunkt, String zeit, String entfernung, String zuletztGespielt,String difficulty, ArrayList<SLocation> SLocationArrayList){
+    Schnitzeljagd(String name, String beschreibung, String zeit, String entfernung, String zuletztGespielt,String difficulty, ArrayList<SLocation> SLocationArrayList){
         this.name=name;
-        this.startpunkt = startpunkt;
+        this.beschreibung = beschreibung;
         this.zeit=zeit;this.entfernung=entfernung;this.zuletztGespielt=zuletztGespielt;
+        this.difficulty=difficulty;
         this.SLocationArrayList = SLocationArrayList;
     }
 
 
     public Schnitzeljagd(Parcel in) {
         name=in.readString();
-        startpunkt =in.readString();
+        beschreibung =in.readString();
         zeit=in.readString();
         difficulty=in.readString();
         entfernung=in.readString();
@@ -42,11 +43,11 @@ public class Schnitzeljagd implements Parcelable, Serializable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.name);
-        dest.writeString(this.startpunkt);
+        dest.writeString(this.beschreibung);
         dest.writeString(this.zeit);
+        dest.writeString(this.difficulty);
         dest.writeString(this.entfernung);
         dest.writeString(this.zuletztGespielt);
-        dest.writeString(this.difficulty);
         dest.writeList(SLocationArrayList);
     }
     public static final Parcelable.Creator<Schnitzeljagd>CREATOR= new Parcelable.Creator<Schnitzeljagd>(){
@@ -65,9 +66,6 @@ public class Schnitzeljagd implements Parcelable, Serializable{
         return name;
     }
 
-    public String getStartpunkt() {
-        return startpunkt;
-    }
 
     public String getZeit() {
         return zeit;

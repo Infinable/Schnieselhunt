@@ -18,6 +18,7 @@ import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -39,14 +40,17 @@ public class GPSActivity extends AppCompatActivity
     private BroadcastReceiver broadcastReceiver;
     TextView latitudeText;
     TextView longitudeText;
+            //Text at the top, describing the Activity
     TextView prompt;
     Schnitzeljagd s;
     ArrayList<SLocation> SLocationArrayList;
     SLocation currRiddleLoc;
     Location location;
-    LinearLayout linearLayout;
+            //text to next loc
     TextView rätseltext;
+            //image to next Loc
     ImageView rätselImage;
+            //increased when User reaches one Location
     int counter=0;
     int maxLength = 0;
 
@@ -57,7 +61,6 @@ public class GPSActivity extends AppCompatActivity
 
         s=getIntent().getExtras().getParcelable("Schnitzeljagd");
         SLocationArrayList =s.getSLocationArrayList();
-        linearLayout=(LinearLayout) findViewById(R.id.mainlayout);
         maxLength = SLocationArrayList.size()-1;
 
         Log.d("tag",s.getSLocationArrayList().get(0).rätseltext);
@@ -81,7 +84,7 @@ public class GPSActivity extends AppCompatActivity
         File imgFile=null;
         if(SLocationArrayList.get(counter).picpath!=null)
         imgFile=new File(SLocationArrayList.get(counter).picpath);
-        if(imgFile.exists()){
+        if(imgFile!=null && imgFile.exists()){
             Bitmap bitmap= BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             rätselImage.setImageBitmap(bitmap);
         }
@@ -97,14 +100,26 @@ public class GPSActivity extends AppCompatActivity
         Log.d("haha", String.valueOf(accuracy));
 
         if (distance < (accuracy + (accuracy/2))){
+            Toast.makeText(this,"Glückwunsch du hast den Punkt gefunden. TODO: benötigte Zeit in punkten umrechnen.",Toast.LENGTH_SHORT).show();
             return true;
         }
 
         return false;
     }
 
-    private void refreshLayout(){
-
+    private void refreshLayout() {
+        if(SLocationArrayList.size()>=counter)
+            return;
+        prompt.setText("Schlage dich vor zum nächsten Ort. Bereits abgelaufene Orte: "+(counter+1)+
+        "Geschwindigkeit: "+location.getSpeed()+"Zeit: "+location.getTime());
+        rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
+        File imgFile = null;
+        if (SLocationArrayList.get(counter).picpath != null)
+            imgFile = new File(SLocationArrayList.get(counter).picpath);
+        if (imgFile != null && imgFile.exists()) {
+            Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            rätselImage.setImageBitmap(bitmap);
+        }
     }
 
 
@@ -153,8 +168,10 @@ public class GPSActivity extends AppCompatActivity
                     SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
                     SchnitzeljagdApp.latitude=Double.valueOf(b.getString("Latitude"));
                     if (counter > maxLength)
+                        //TODO: Übergang in EndScreen mit Gratulation, vielleicht erreichte Punkte etc.
                         return;
                     else if (checkLocation(location, counter)){
+                        Log.d(LOG_TAG,"Counter erhöht. Bisheriger Wert: "+counter);
                         counter++;
                         refreshLayout();
                     }

@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -50,13 +51,16 @@ import static com.android.highlifestudio.schnieselhunt.GPSActivity.PERMISSION_AC
 public class AddActivity extends AppCompatActivity {
 
     private TextView latitudeText,longitudeText;
-    Button add,addPicture;
+    Button add,addPicture,locAdd;
     ImageView imageView;
     EditText riddleText;
     String imageName;
     String path;
     File photoFile;
     Location location;
+
+    //Liste von aktuellen Orten
+    ArrayList<SLocation> list=new ArrayList<>();
 
     SharedPreferences pref;
     SharedPreferences.Editor edit;
@@ -66,7 +70,6 @@ public class AddActivity extends AppCompatActivity {
 
     private BroadcastReceiver broadcastReceiver;
     static String LOG_TAG = "AddActivity";
-    //TODO: add more than one location schnitzeljagden
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,11 +95,21 @@ public class AddActivity extends AppCompatActivity {
     }
 
     public void initWidgets(){
+        locAdd=(Button)findViewById(R.id.addLocation);
+        locAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addLocToList();
+            }
+        });
         add=(Button)findViewById(R.id.addSchnitzeljagd);
         add.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
                 writeToFile();
+                Toast.makeText(AddActivity.this,"Erfolgreich Schnitzeljagd gespeichert!",Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(AddActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
         });
         longitudeText=(TextView)findViewById(R.id.LongitudeTextView);
@@ -136,16 +149,26 @@ public class AddActivity extends AppCompatActivity {
         riddleText=(EditText)findViewById(R.id.riddletext);
     }
 
+    public void addLocToList(){
+        if(riddleText.getText().toString().equals("")){
+            Toast.makeText(this,"Bitte eine Beschreibung zum jetzigen Ort hinzufügen. Optional ist auch ein Bild hinzufügbar",Toast.LENGTH_SHORT).show();
+            return;
+        }
+        SLocation sLocation=new SLocation(riddleText.getText().toString(),path,SchnitzeljagdApp.longitude,SchnitzeljagdApp.latitude);
+        if(list!=null)
+        list.add(sLocation);
+        else list=new ArrayList<>();
+        imageView.setImageResource(android.R.color.transparent);
+        riddleText.setText("");
+    }
     /**
      * adds current Location with Schnitzeljagd to list in application as new Schnitzeljagd and saves extended list in file
      * dependency: Schnitzeljagdlist in Application is latest
      */
     public void writeToFile(){
         Bundle b=getIntent().getExtras();
-        SLocation sLocation=new SLocation(riddleText.getText().toString(),path,SchnitzeljagdApp.longitude,SchnitzeljagdApp.latitude);
-        ArrayList<SLocation> list=new ArrayList<>();
-        list.add(sLocation);
-        Schnitzeljagd s=new Schnitzeljagd(b.getString("name"),"",b.getString("time"),b.getString("distance"),"",b.getString("difficulty"),list);
+        Schnitzeljagd s=new Schnitzeljagd(b.getString("name"),b.getString("description"),b.getString("time"),b.getString("distance"),"",b.getString("difficulty"),list);
+        Log.d(LOG_TAG,b.getString("difficulty"));
         SchnitzeljagdApp.Schnitzeljagdlist.add(s);
         try{
             ObjectOutputStream oos=new ObjectOutputStream(new FileOutputStream(new File(new File(Environment.getExternalStorageDirectory(),"")+File.separator+SchnitzeljagdApp.filename)));

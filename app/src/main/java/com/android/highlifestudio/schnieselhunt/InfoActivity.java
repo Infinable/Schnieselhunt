@@ -31,8 +31,11 @@ public class InfoActivity extends AppCompatActivity {
         TextView strecke= (TextView) findViewById(R.id.StreckeValue);
         strecke.setText(s.getEntfernung());
 
-        TextView start= (TextView) findViewById(R.id.StartValue);
-       // start.setText(s.getStartpunkt());
+        TextView difficulty=(TextView) findViewById(R.id.Schwierigkeit);
+        difficulty.setText(s.difficulty);
+
+        TextView description= (TextView) findViewById(R.id.Beschreibung);
+        description.setText(s.beschreibung);
 
         Button btn=(Button) findViewById(R.id.lets_go_btn);
         btn.setOnClickListener(new View.OnClickListener() {

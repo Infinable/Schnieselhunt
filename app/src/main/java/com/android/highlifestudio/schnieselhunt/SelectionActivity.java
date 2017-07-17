@@ -67,7 +67,7 @@ public class SelectionActivity extends AppCompatActivity {
 
 
         try {
-            FileOutputStream wr= new FileOutputStream( file);
+            FileOutputStream wr= new FileOutputStream(file);
             wr.write(message.getBytes());
 
             Log.d("tag", file.getParent());
@@ -139,7 +139,6 @@ public class SelectionActivity extends AppCompatActivity {
                     startActivity(i);
                 }
             });
-            //TODO:Colour setten DINGA
             //view.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
 
             LinearLayout.LayoutParams details= new LinearLayout.LayoutParams(

@@ -3,6 +3,7 @@ package com.android.highlifestudio.schnieselhunt;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +16,8 @@ public class GeneralSchnitzeljagdAddActivity extends AppCompatActivity implement
 
     Spinner spinner;
     Button next;
-    EditText time, distance, name;
+    EditText time, distance, name, description;
+    static final String LOG_TAG="GeneralAddActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,24 +28,30 @@ public class GeneralSchnitzeljagdAddActivity extends AppCompatActivity implement
         distance=(EditText)findViewById(R.id.StreckeText);
         name=(EditText)findViewById(R.id.NameText);
         next=(Button)findViewById(R.id.nextButton);
+        description=(EditText)findViewById(R.id.BeschreibungText);
 
         next.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
                 Bundle b=new Bundle();
-                if (name.getText().toString()!="Name der Schnitzeljagd" && name.getText().toString()!="") {
+                if (name.getText().toString()!="Name der Schnitzeljagd" && !name.getText().toString().equals("")) {
                     b.putString("name",name.getText().toString());
-                    if (time.getText().toString() != "Zeitangabe" && time.getText().toString() != "") {
+                    if (time.getText().toString() != "Zeitangabe" && !time.getText().toString().equals("")){
                         b.putString("time", time.getText().toString());
                         {
-                            if (distance.getText().toString() != "Länge der Strecke" && distance.getText().toString() != "") {
-
+                            if (distance.getText().toString() != "Länge der Strecke" && !distance.getText().toString().equals("")) {
                                 b.putString("distance", distance.getText().toString());
-                                b.putString("difficulty",spinner.getSelectedItem().toString());
-                                Intent i=new Intent(GeneralSchnitzeljagdAddActivity.this, AddActivity.class);
-                                i.putExtras(b);
-                                startActivity(i);
+                                if(!description.equals("")){
+                                    b.putString("description",description.getText().toString());
+                                    Log.d(LOG_TAG,"difficulty"+spinner.getSelectedItem()+" Description: "+description.toString());
+                                    b.putString("difficulty",spinner.getSelectedItem().toString());
+                                    Intent i=new Intent(GeneralSchnitzeljagdAddActivity.this, AddActivity.class);
+                                    i.putExtras(b);
+                                    startActivity(i);
+                                }
+                                else
+                                    Toast.makeText(GeneralSchnitzeljagdAddActivity.this, "Bitte kurze Beschreibung zur Schnitzeljagd eingeben!", Toast.LENGTH_SHORT).show();
                             }
                             else
                                 Toast.makeText(GeneralSchnitzeljagdAddActivity.this, "Bitte einen Streckenwert eingeben!", Toast.LENGTH_SHORT).show();

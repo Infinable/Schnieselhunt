@@ -87,13 +87,27 @@
                     android:text="Bild hinzufügen"
                     android:theme="@style/MyStyle" />
 
-                <Button
-                    android:theme="@style/MyStyle"
-                    android:id="@+id/addSchnitzeljagd"
+                <LinearLayout
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Standort hinzufügen"/>
-            </LinearLayout>
+                    android:layout_height="wrap_content">
+                    <Button
+                        android:theme="@style/MyStyle"
+                        android:id="@+id/addLocation"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Standort hinzufügen"/>
+                    <Button
+                        android:theme="@style/MyStyle"
+                        android:id="@+id/addSchnitzeljagd"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:text="Schnitzeljagd speichern"/>
+                </LinearLayout>
+                </LinearLayout>
+
 
         </ScrollView>
     </android.support.v4.widget.NestedScrollView>
