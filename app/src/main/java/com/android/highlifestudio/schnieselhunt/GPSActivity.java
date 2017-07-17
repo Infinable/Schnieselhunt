@@ -1,6 +1,10 @@
 package com.android.highlifestudio.schnieselhunt;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,11 +13,13 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,6 +28,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.firebase.messaging.RemoteMessage;
 
 import org.w3c.dom.Text;
 
@@ -100,6 +107,21 @@ public class GPSActivity extends AppCompatActivity
         Log.d("haha", String.valueOf(accuracy));
 
         if (distance < (accuracy + (accuracy/2))){
+            TaskStackBuilder builder= null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+                builder = TaskStackBuilder.create(this);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                builder.addParentStack(GPSActivity.class);
+            }
+
+            NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(this)
+                    .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                    .setContentTitle("Du hast das Ziel Gefunden!")
+                    .setContentText("Glückwunsch du hast dein Ziel erreicht, schaue nach was dein nächstes Ziel ist");
+            NotificationManager manager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+            manager.notify(1,mBuilder.build());
+
             Toast.makeText(this,"Glückwunsch du hast den Punkt gefunden. TODO: benötigte Zeit in punkten umrechnen.",Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -108,10 +130,10 @@ public class GPSActivity extends AppCompatActivity
     }
 
     private void refreshLayout() {
-        if(SLocationArrayList.size()>=counter)
+        if(SLocationArrayList.size()<=counter)
             return;
         prompt.setText("Schlage dich vor zum nächsten Ort. Bereits abgelaufene Orte: "+(counter+1)+
-        "Geschwindigkeit: "+location.getSpeed()+"Zeit: "+location.getTime());
+        "Geschwindigkeit: "+" Zeit: "+location.getTime());
         rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
         File imgFile = null;
         if (SLocationArrayList.get(counter).picpath != null)

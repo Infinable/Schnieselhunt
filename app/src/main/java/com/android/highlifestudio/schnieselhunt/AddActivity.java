@@ -106,6 +106,10 @@ public class AddActivity extends AppCompatActivity {
         add.setOnClickListener(new Button.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if(list.isEmpty()){
+                    Toast.makeText(AddActivity.this.getApplicationContext(),"Füge bitte zumindest einen Ort der Schnitzeljagd hinzu!",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 writeToFile();
                 Toast.makeText(AddActivity.this,"Erfolgreich Schnitzeljagd gespeichert!",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(AddActivity.this, MenuActivity.class);
