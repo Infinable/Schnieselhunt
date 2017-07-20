@@ -1,9 +1,7 @@
 package com.android.highlifestudio.schnieselhunt;
 
 import android.Manifest;
-import android.app.Notification;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -14,6 +12,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -21,16 +21,14 @@ import android.support.v4.content.ContextCompat;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.messaging.RemoteMessage;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,6 +58,10 @@ public class GPSActivity extends AppCompatActivity
             //increased when User reaches one Location
     int counter=0;
     int maxLength = 0;
+    double time = 0;
+    double points = 0;
+    Handler handler;
+    boolean finished = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,23 @@ public class GPSActivity extends AppCompatActivity
             rätselImage.setImageBitmap(bitmap);
         }
 
+
+        handler = new Handler();
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                Log.d("Bardia", "run was called");
+                if (!finished)
+                    time++;
+                Log.d("Bardia", "time: "+ time);
+                if (!finished)
+                    handler.postDelayed(this, 1000);
+            }
+        };
+        if (!finished) {
+            handler.postDelayed(runnable, 1000);
+        }
+
     }
 
     private boolean checkLocation(Location l, int a){
@@ -107,6 +126,8 @@ public class GPSActivity extends AppCompatActivity
         Log.d("haha", String.valueOf(accuracy));
 
         if (distance < (accuracy + (accuracy/2))){
+            if (maxLength == counter)
+                finished = true;
             TaskStackBuilder builder= null;
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
                 builder = TaskStackBuilder.create(this);
@@ -114,15 +135,26 @@ public class GPSActivity extends AppCompatActivity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 builder.addParentStack(GPSActivity.class);
             }
+            if (!finished) {
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                        .setContentTitle("Du hast das Ziel gefunden!")
+                        .setContentText("Glückwunsch, du hast dein Ziel erreicht, schaue nach was dein nächstes Ziel ist.");
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(1, mBuilder.build());
 
-            NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_event_available_black_24dp)
-                    .setContentTitle("Du hast das Ziel Gefunden!")
-                    .setContentText("Glückwunsch du hast dein Ziel erreicht, schaue nach was dein nächstes Ziel ist");
-            NotificationManager manager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(1,mBuilder.build());
+                Toast.makeText(this, "Glückwunsch, du hast den Punkt gefunden.", Toast.LENGTH_SHORT).show();
+            }
+            else if (finished) {
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                        .setContentTitle("Du hast das letzte Ziel erreicht!")
+                        .setContentText("Herzlichen Glückwunsch, du hast das letzte Ziel gefunden. :)");
+                NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(1, mBuilder.build());
 
-            Toast.makeText(this,"Glückwunsch du hast den Punkt gefunden. TODO: benötigte Zeit in punkten umrechnen.",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Wow, du hast alle Punkte gefunden!! Gut gemacht. :)", Toast.LENGTH_SHORT).show();
+            }
             return true;
         }
 
@@ -189,15 +221,21 @@ public class GPSActivity extends AppCompatActivity
                     longitudeText.setText(b.getString("Longitude"));
                     SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
                     SchnitzeljagdApp.latitude=Double.valueOf(b.getString("Latitude"));
-                    if (counter > maxLength)
-                        //TODO: Übergang in EndScreen mit Gratulation, vielleicht erreichte Punkte etc.
-                        return;
+
+                    if (counter == maxLength && checkLocation(location, counter)) {
+                        points = (1 / time) * 3000;
+                        Log.d("Bardia", "ENDPUNKTE: " + points);
+                        Intent i = new Intent(GPSActivity.this, EndActivity.class);
+                        i.putExtra("Schnitzeljagd",(Parcelable) s);
+                        i.putExtra("Time", time);
+                        i.putExtra("Points", points);
+                        startActivity(i);
+                    }
                     else if (checkLocation(location, counter)){
                         Log.d(LOG_TAG,"Counter erhöht. Bisheriger Wert: "+counter);
                         counter++;
                         refreshLayout();
                     }
-
                 }
             };
             registerReceiver(broadcastReceiver,new IntentFilter(GPSService.LOCATION_UPDATE));
