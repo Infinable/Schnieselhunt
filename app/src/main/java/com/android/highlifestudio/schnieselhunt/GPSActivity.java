@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -22,15 +23,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.messaging.RemoteMessage;
 
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -82,6 +80,7 @@ public class GPSActivity extends AppCompatActivity
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSION_ACCESS_FINE_LOCATION);
             }
         }
+
         latitudeText= (TextView) findViewById(R.id.latitudeText);
         longitudeText= (TextView)findViewById(R.id.longitudeText);
         prompt=(TextView)findViewById(R.id.moveToLocationPrompt);
@@ -89,11 +88,44 @@ public class GPSActivity extends AppCompatActivity
         rätseltext=(TextView) findViewById(R.id.Rätseltext);
         rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
         File imgFile=null;
+        String pictpath=SLocationArrayList.get(counter).picpath;
+        Log.d(LOG_TAG,"Picture path:"+pictpath+"\n");
+        BitmapFactory.Options options=new BitmapFactory.Options();
+        options.inSampleSize=4;
+        switch (pictpath){
+            case "1":
+                //Bitmap bm=BitmapFactory.decodeResource(getResources(),R.drawable.krupp_park10,options);
+                /*int nh= (int)bm.getHeight()*(1024)/bm.getWidth();
+                bm=Bitmap.createScaledBitmap(bm,1024,nh,true);*/
+                //rätselImage.setImageBitmap(bm);
+                rätselImage.setRotation(rätselImage.getRotation()+90);
+                rätselImage.setImageResource(getResources().getIdentifier("krupp_park10","drawable",getPackageName()));
+                return;
+            case "2":
+                rätselImage.setImageResource(getResources().getIdentifier("krupp_park11","drawable",getPackageName()));
+                rätselImage.setRotation(rätselImage.getRotation()+90);
+                return;
+            case "3":
+                rätselImage.setImageResource(getResources().getIdentifier("krupp_park12","drawable",getPackageName()));
+                rätselImage.setRotation(rätselImage.getRotation()+90);
+                return;
+            case "4":
+                rätselImage.setImageResource(getResources().getIdentifier("krupp_park13","drawable",getPackageName()));
+                rätselImage.setRotation(rätselImage.getRotation()+90);
+                return;
+            case "5":
+                rätselImage.setImageResource(getResources().getIdentifier("krupp_park14","drawable",getPackageName()));
+                rätselImage.setRotation(rätselImage.getRotation()+90);
+                return;
+
+
+        }
         if(SLocationArrayList.get(counter).picpath!=null)
         imgFile=new File(SLocationArrayList.get(counter).picpath);
         if(imgFile!=null && imgFile.exists()){
             Bitmap bitmap= BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             rätselImage.setImageBitmap(bitmap);
+            rätselImage.setRotation(90);
         }
 
     }
