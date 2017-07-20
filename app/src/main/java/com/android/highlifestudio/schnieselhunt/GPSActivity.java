@@ -150,7 +150,7 @@ public class GPSActivity extends AppCompatActivity
             }
 
             NotificationCompat.Builder mBuilder= new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                    .setSmallIcon(R.drawable.ic_event_available_white_24dp)
                     .setContentTitle("Du hast das Ziel Gefunden!")
                     .setContentText("Glückwunsch du hast dein Ziel erreicht, schaue nach was dein nächstes Ziel ist");
             NotificationManager manager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);

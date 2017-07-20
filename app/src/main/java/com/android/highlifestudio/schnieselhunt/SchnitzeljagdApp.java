@@ -34,6 +34,7 @@ public class SchnitzeljagdApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d("TAG",String.valueOf(getResources().getDisplayMetrics().density));
         readFiles();
         initializeBegin();
         context=getApplicationContext();
