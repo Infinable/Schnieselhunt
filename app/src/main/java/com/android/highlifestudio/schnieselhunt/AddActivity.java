@@ -87,8 +87,6 @@ public class AddActivity extends AppCompatActivity {
             edit.commit();
         }
 
-
-
         StrictMode.VmPolicy.Builder builder= new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         super.onCreate(savedInstanceState);
@@ -108,8 +106,10 @@ public class AddActivity extends AppCompatActivity {
              *
              */
             textfile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
-                    ,"Schnitzeljagd"+pref.getInt("" +
+                    ,"Schnieselhunt"+File.separator+"Schnitzeljagd"+pref.getInt("" +
                     "value",0)+".txt");
+            textfile.getParentFile().mkdirs();
+            Log.d(LOG_TAG,"new File created under: "+textfile.getAbsolutePath());
             FileOutputStream f=new FileOutputStream(textfile);
             PrintWriter wr= new PrintWriter(f);
             Bundle b=getIntent().getExtras();

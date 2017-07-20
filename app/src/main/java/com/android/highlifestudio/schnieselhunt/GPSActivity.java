@@ -92,6 +92,8 @@ public class GPSActivity extends AppCompatActivity
         Log.d(LOG_TAG,"Picture path:"+pictpath+"\n");
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inSampleSize=4;
+        if(pictpath==null)
+            return;
         switch (pictpath){
             case "1":
                 //Bitmap bm=BitmapFactory.decodeResource(getResources(),R.drawable.krupp_park10,options);
