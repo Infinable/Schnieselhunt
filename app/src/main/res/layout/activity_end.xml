@@ -44,6 +44,7 @@ tools:context="com.android.highlifestudio.schnieselhunt.GPSActivity">
             android:textColor="@android:color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:fontFamily="sans-serif"
+            android:paddingLeft="8dp"
             android:text="Deine benötigte Zeit:" />
 
     </LinearLayout>
@@ -64,6 +65,7 @@ tools:context="com.android.highlifestudio.schnieselhunt.GPSActivity">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
             android:fontFamily="sans-serif"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/white"
