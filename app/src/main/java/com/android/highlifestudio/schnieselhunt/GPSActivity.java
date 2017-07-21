@@ -167,7 +167,7 @@ public class GPSActivity extends AppCompatActivity
         float distance = l.distanceTo(temp);
         Log.d("haha", String.valueOf(accuracy));
 
-        if (distance < (accuracy + (accuracy/2))){
+        if (distance < accuracy){
             if (maxLength == counter)
                 finished = true;
             TaskStackBuilder builder= null;
