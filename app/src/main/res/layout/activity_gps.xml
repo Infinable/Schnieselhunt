@@ -38,6 +38,7 @@
 
         <TextView
             android:text="Longitude:"
+            android:id="@+id/DauerValue"
             android:layout_margin="2dp"
             android:layout_column="0"
         />

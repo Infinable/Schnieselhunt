@@ -180,7 +180,7 @@ public class GPSActivity extends AppCompatActivity
             }
             if (!finished) {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                        .setSmallIcon(R.drawable.ic_event_available_white_24dp)
                         .setContentTitle("Du hast das Ziel gefunden!")
                         .setContentText("Glückwunsch, du hast dein Ziel erreicht, schaue nach was dein nächstes Ziel ist.");
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -190,7 +190,7 @@ public class GPSActivity extends AppCompatActivity
             }
             else if (finished) {
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_event_available_black_24dp)
+                        .setSmallIcon(R.drawable.ic_event_available_white_24dp)
                         .setContentTitle("Du hast das letzte Ziel erreicht!")
                         .setContentText("Herzlichen Glückwunsch, du hast das letzte Ziel gefunden. :)");
                 NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
