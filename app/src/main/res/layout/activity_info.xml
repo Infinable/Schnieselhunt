@@ -9,6 +9,7 @@
     android:layout_marginRight="16dp"
     android:layout_marginBottom="16dp"
     android:orientation="vertical"
+    android:weightSum="3"
     tools:context="com.android.highlifestudio.schnieselhunt.InfoActivity">
 
     <TextView
@@ -36,24 +37,7 @@
             android:layout_weight="1"
             android:text="TextView" />
         </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/Start"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Startpunkt:" />
-            <TextView
-                android:id="@+id/StartValue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="TextView" />
-            </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -89,28 +73,19 @@
             android:text="TextView" />
 
     </LinearLayout>
-    <LinearLayout
+    <TextView
+        android:id="@+id/Beschreibung"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Beschreibung:" />
-        <TextView
-            android:id="@+id/Beschreibung"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="TextView" />
-
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:text="TextView" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"/>
+        android:layout_weight="2"/>
 
     <Button
         android:theme="@style/MyStyle"

@@ -26,6 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:padding="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:text="Die Schnitzeljagd beginnt!!!\nVersuche den nächsten Ort anhand der Hinweise zu finden."
                 android:id="@+id/moveToLocationPrompt"/>

@@ -79,7 +79,6 @@ public class GPSActivity extends AppCompatActivity
         SLocationArrayList =s.getSLocationArrayList();
         maxLength = SLocationArrayList.size()-1;
 
-        Log.d("tag",s.getSLocationArrayList().get(0).rätseltext);
         Iterator<SLocation> listIt;
         if(SLocationArrayList !=null && !SLocationArrayList.isEmpty()) {
             listIt = SLocationArrayList.iterator();
@@ -207,8 +206,8 @@ public class GPSActivity extends AppCompatActivity
     private void refreshLayout() {
         if(SLocationArrayList.size()<=counter)
             return;
-        prompt.setText("Schlage dich vor zum nächsten Ort. Bereits abgelaufene Orte: "+(counter+1)+
-        "Geschwindigkeit: "+" Zeit: "+location.getTime());
+        prompt.setText("Schlage dich vor zum nächsten Ort.\n Bereits abgelaufene Orte: "+(counter)+
+        "\nZeit: "+time);
         rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
         File imgFile = null;
         if (SLocationArrayList.get(counter).picpath != null)
@@ -266,7 +265,7 @@ public class GPSActivity extends AppCompatActivity
                     SchnitzeljagdApp.latitude=Double.valueOf(b.getString("Latitude"));
 
                     if (counter == maxLength && checkLocation(location, counter)) {
-                        points = (1 / time) * 3000;
+                        points = (1 / time) * 10000;
                         Log.d("Bardia", "ENDPUNKTE: " + points);
                         Intent i = new Intent(GPSActivity.this, EndActivity.class);
                         i.putExtra("Schnitzeljagd",(Parcelable) s);

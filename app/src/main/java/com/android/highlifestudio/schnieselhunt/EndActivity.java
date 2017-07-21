@@ -22,10 +22,11 @@ public class EndActivity extends AppCompatActivity {
         
         //// TODO: 20.07.2017 : time & points anzeigen lassen 
         TextView dauer = (TextView) findViewById(R.id.TimeValue);
-        dauer.setText(String.valueOf(getIntent().getExtras().getDouble("Time")));
+        double time=getIntent().getExtras().getDouble("Time");
+        dauer.setText(String.valueOf(calculateTime(time)));
 
         TextView punkte = (TextView) findViewById(R.id.PunkteValue);
-        punkte.setText(String.valueOf(getIntent().getExtras().getDouble("Points")));
+        punkte.setText(String.valueOf((int) getIntent().getExtras().getDouble("Points")));
 
 
 
@@ -38,5 +39,10 @@ public class EndActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+    }
+    public String calculateTime (double secs){
+        int minutes=(int)(secs/60);
+        int seconds=(int)(secs%60);
+        return String.format("%02d:%02d",minutes,seconds);
     }
 }
