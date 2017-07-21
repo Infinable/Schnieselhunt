@@ -39,7 +39,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import static com.android.highlifestudio.schnieselhunt.GPSActivity.PERMISSION_ACCESS_FINE_LOCATION;
 
@@ -58,6 +61,10 @@ public class AddActivity extends AppCompatActivity {
     String path;
     File photoFile;
     Location location;
+    /**
+     * development purpose
+     */
+    File textfile;
 
     //Liste von aktuellen Orten
     ArrayList<SLocation> list=new ArrayList<>();
@@ -75,8 +82,10 @@ public class AddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         pref = this.getSharedPreferences("Share",Context.MODE_PRIVATE);
         edit=pref.edit();
-        edit.putInt("Value",0);
-        edit.commit();
+        if(pref.getInt("value",0)==0) {
+            edit.putInt("value", 0);
+            edit.commit();
+        }
 
         StrictMode.VmPolicy.Builder builder= new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -90,8 +99,41 @@ public class AddActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.CAMERA}, PERMISSION_ACCESS_FINE_LOCATION);
             }
         }
-
-
+    }
+    public void writeToTextFile(){
+        try {
+            /**developer purpose
+             *
+             */
+            textfile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
+                    ,"Schnieselhunt"+File.separator+"Schnitzeljagd"+pref.getInt("" +
+                    "value",0)+".txt");
+            textfile.getParentFile().mkdirs();
+            Log.d(LOG_TAG,"new File created under: "+textfile.getAbsolutePath());
+            FileOutputStream f=new FileOutputStream(textfile);
+            PrintWriter wr= new PrintWriter(f);
+            Bundle b=getIntent().getExtras();
+            wr.append("Name: "+b.getString("name")+"\n");
+            wr.append("Description: "+b.getString("description")+"\n");
+            wr.println("Time: "+b.getString("time"));
+            wr.println("Distance "+b.getString("distance"));
+            wr.println("Difficulty"+b.getString("difficulty"));
+            Iterator<SLocation> iterator=list.iterator();
+            while (iterator.hasNext()){
+                SLocation location=iterator.next();
+                wr.println("First Location");
+                wr.println("Latitude: "+location.latitude);
+                wr.println("Longitude: "+location.longitude);
+                wr.println("Rätseltext: "+location.rätseltext);
+            }
+            wr.close();
+            f.flush();
+            f.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initWidgets(){
@@ -110,6 +152,7 @@ public class AddActivity extends AppCompatActivity {
                     Toast.makeText(AddActivity.this.getApplicationContext(),"Füge bitte zumindest einen Ort der Schnitzeljagd hinzu!",Toast.LENGTH_SHORT).show();
                     return;
                 }
+                writeToTextFile();
                 writeToFile();
                 Toast.makeText(AddActivity.this,"Erfolgreich Schnitzeljagd gespeichert!",Toast.LENGTH_SHORT).show();
                 Intent intent=new Intent(AddActivity.this, MenuActivity.class);
@@ -127,15 +170,16 @@ public class AddActivity extends AppCompatActivity {
                 photoFile=null;
                 int count=pref.getInt("value",0);
 
-                imageName=getIntent().getStringExtra("name")+(count)++;
+                imageName=getIntent().getStringExtra("name")+(count++);
                 Log.d(LOG_TAG,"Count: "+count+"Image name: "+imageName);
                 edit.putInt("value",count);
+                edit.commit();
 
                 Log.d(LOG_TAG,imageName);
                 File folder= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),"Schnieselhunt");
                 folder.mkdir();
                 Log.d(LOG_TAG,folder.getAbsolutePath());
-                photoFile=new File(folder,imageName+count+".jpg");
+                photoFile=new File(folder,imageName+".jpg");
                 path=photoFile.getAbsolutePath();
                 Log.d(LOG_TAG,path);
 
