@@ -98,8 +98,9 @@ public class GPSActivity extends AppCompatActivity
         rätseltext=(TextView) findViewById(R.id.Rätseltext);
         rätseltext.setText(SLocationArrayList.get(counter).rätseltext);
         File imgFile=null;
+        Log.d("haha", "Counter START: " +counter);
         String pictpath=SLocationArrayList.get(counter).picpath;
-        Log.d(LOG_TAG,"Picture path:"+pictpath+"\n");
+        Log.d("haha","Picture path:"+pictpath+"\n");
         BitmapFactory.Options options=new BitmapFactory.Options();
         options.inSampleSize=4;
         if(pictpath==null)
@@ -165,8 +166,12 @@ public class GPSActivity extends AppCompatActivity
         temp.setLatitude(SLocationArrayList.get(counter).latitude);
         temp.setLongitude(SLocationArrayList.get(counter).longitude);
         float distance = l.distanceTo(temp);
-        Log.d("haha", String.valueOf(accuracy));
-
+        Log.d("haha","dintanz: "+distance);
+        Log.d("haha", "accuracy (OLD) = " +String.valueOf(accuracy));
+        if (accuracy > 25 || accuracy < 5){
+            accuracy = 20;
+        }
+        Log.d("haha", "accuracy (NEW) = " +String.valueOf(accuracy));
         if (distance < accuracy){
             if (maxLength == counter)
                 finished = true;
@@ -263,7 +268,7 @@ public class GPSActivity extends AppCompatActivity
                     longitudeText.setText(b.getString("Longitude"));
                     SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
                     SchnitzeljagdApp.latitude=Double.valueOf(b.getString("Latitude"));
-
+                    Log.d("haha","counter value: " + counter);
                     if (counter == maxLength && checkLocation(location, counter)) {
                         points = (1 / time) * 10000;
                         Log.d("Bardia", "ENDPUNKTE: " + points);
@@ -274,9 +279,10 @@ public class GPSActivity extends AppCompatActivity
                         startActivity(i);
                     }
                     else if (checkLocation(location, counter)){
-                        Log.d(LOG_TAG,"Counter erhöht. Bisheriger Wert: "+counter);
+                        Log.d("haha","Counter erhöht. Bisheriger Wert: "+counter);
                         counter++;
                         refreshLayout();
+
                     }
                 }
             };
