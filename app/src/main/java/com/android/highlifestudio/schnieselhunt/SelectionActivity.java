@@ -3,6 +3,7 @@ package com.android.highlifestudio.schnieselhunt;
 import android.*;
 import android.Manifest;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.support.v4.app.ActivityCompat;
@@ -45,7 +46,13 @@ public class SelectionActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
         setContentView(R.layout.activity_selection);
         View v =this.findViewById(android.R.id.content);
-        path= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Schnieseljagd");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            path= new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),"Schnieseljagd");
+        }
+        else {
+            path = new File(Environment.getExternalStorageDirectory() + "/Documents/Schnieselhunt");
+            path.mkdirs();
+        }
         String file_name ="Schnitzeljagden.txt";
         file=new File(path,file_name);
         if(!path.mkdirs())

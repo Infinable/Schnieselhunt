@@ -19,8 +19,7 @@ public class EndActivity extends AppCompatActivity {
 
         Bundle data= getIntent().getExtras();
         s= data.getParcelable("Schnitzeljagd");
-        
-        //// TODO: 20.07.2017 : time & points anzeigen lassen 
+
         TextView dauer = (TextView) findViewById(R.id.TimeValue);
         double time=getIntent().getExtras().getDouble("Time");
         dauer.setText(String.valueOf(calculateTime(time)));

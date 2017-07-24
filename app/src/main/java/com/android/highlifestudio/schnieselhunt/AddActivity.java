@@ -13,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
@@ -52,7 +53,6 @@ import static com.android.highlifestudio.schnieselhunt.GPSActivity.PERMISSION_AC
  *        Start GPS Service if given
  */
 public class AddActivity extends AppCompatActivity {
-
     private TextView latitudeText,longitudeText;
     Button add,addPicture,locAdd;
     ImageView imageView;
@@ -105,9 +105,17 @@ public class AddActivity extends AppCompatActivity {
             /**developer purpose
              *
              */
-            textfile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
-                    ,"Schnieselhunt"+File.separator+"Schnitzeljagd"+pref.getInt("" +
-                    "value",0)+".txt");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                textfile=new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()
+                        ,"Schnieselhunt"+File.separator+"Schnitzeljagd"+pref.getInt("" +
+                        "value",0)+".txt");
+            }
+            else{
+                File path=new File(Environment.getExternalStorageDirectory()+"/Documents/Schnieselhunt");
+                path.mkdirs();
+                textfile=new File(path,"Schnitzeljagd"+pref.getInt(""+"value",0)+".txt");
+            }
+
             textfile.getParentFile().mkdirs();
             Log.d(LOG_TAG,"new File created under: "+textfile.getAbsolutePath());
             FileOutputStream f=new FileOutputStream(textfile);
@@ -173,6 +181,7 @@ public class AddActivity extends AppCompatActivity {
                 imageName=getIntent().getStringExtra("name")+(count++);
                 Log.d(LOG_TAG,"Count: "+count+"Image name: "+imageName);
                 edit.putInt("value",count);
+                Log.d("Saved value",String.valueOf(pref.getInt("value",0)));
                 edit.commit();
 
                 Log.d(LOG_TAG,imageName);
@@ -237,6 +246,11 @@ public class AddActivity extends AppCompatActivity {
 
             try {
                 Bitmap  bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(photoFile));
+                if(getResources().getDisplayMetrics().density<=3) {
+                    int nh = (int) (bitmap.getHeight() * ((double) 1024 / bitmap.getWidth()));
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+                }
+                Log.d("haha",String.valueOf(getResources().getDisplayMetrics().density));
                 imageView.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -286,8 +300,12 @@ public class AddActivity extends AppCompatActivity {
                     location=b.getParcelable("Location");
                     latitudeText.setText(b.getString("Latitude"));
                     longitudeText.setText(b.getString("Longitude"));
-                    SchnitzeljagdApp.longitude = Double.valueOf(b.getString("Longitude"));
-                    SchnitzeljagdApp.latitude = Double.valueOf(b.getString("Latitude"));
+                    if(SchnitzeljagdApp.latitude==0&&SchnitzeljagdApp.longitude==0) {
+                        SchnitzeljagdApp.latitude = Double.valueOf(b.getString("Latitude"));
+                        SchnitzeljagdApp.longitude=Double.valueOf(b.getString("Longitude"));
+                    }
+                    SchnitzeljagdApp.longitude = SchnitzeljagdApp.longitude*0.8+((0.2)*Double.valueOf(b.getString("Longitude")));
+                    SchnitzeljagdApp.latitude = SchnitzeljagdApp.latitude*0.8+((0.2)*Double.valueOf(b.getString("Latitude")));
 
                 }
             };

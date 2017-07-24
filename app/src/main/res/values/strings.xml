@@ -2,5 +2,5 @@
     <string name="app_name">Schnieselhunt</string>
     <string name="start_button">START</string>
     <string name="add_button">add Schnitzeljagd</string>
-    <string name="start_jagd">Start Schnitzeljagd</string>
+    <string name="start_jagd">Play Schnitzeljagd</string>
 </resources>

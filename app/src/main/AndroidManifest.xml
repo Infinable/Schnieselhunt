@@ -26,9 +26,13 @@
         </activity>
         <activity android:name=".MenuActivity" />
         <activity android:name=".SelectionActivity" />
-        <activity android:name=".AddActivity" />
+        <activity android:name=".AddActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
         <activity android:name=".InfoActivity" />
-        <activity android:name=".GPSActivity" />
+        <activity android:name=".GPSActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name="android.support.v4.content.FileProvider"

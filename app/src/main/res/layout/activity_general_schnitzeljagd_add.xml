@@ -10,6 +10,14 @@
     android:layout_marginBottom="8dp"
     android:orientation="vertical"
     tools:context="com.android.highlifestudio.schnieselhunt.GeneralSchnitzeljagdAddActivity">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -138,6 +146,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:text="Hinzufügen"/>
-
-
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

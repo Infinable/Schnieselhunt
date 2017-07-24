@@ -41,11 +41,11 @@ public class SchnitzeljagdApp extends Application {
     }
     public void initializeBegin(){
         ArrayList<SLocation> list=new ArrayList<SLocation>();
-        list.add(new SLocation("Finde diesen Punkt an dem man trainieren kann.","1",51.46302,6.986923));
-        list.add(new SLocation("Der See im Krupp Park. Vor dem Mauerweg.","2",51.46415,6.9861041));
-        list.add(new SLocation("Der Volleyballplatz","3",51.4629259,6.985531));
-        list.add(new SLocation("Der Skaterpark","4",51.4615385,6.9866859));
-        list.add(new SLocation("Der Ausgang","5",51.4593,6.986544));
+        list.add(new SLocation("Finde diesen Punkt an dem man trainieren kann.","1",6.986923,51.46302));
+        list.add(new SLocation("Der See im Krupp Park. Vor dem Mauerweg.","2",6.9861041,51.46415));
+        list.add(new SLocation("Der Volleyballplatz","3",6.985531,51.4629259));
+        list.add(new SLocation("Der Skaterpark","4",6.9866859,51.4615385));
+        list.add(new SLocation("Der Ausgang","5",6.986544,51.4593));
         Schnitzeljagd KruppPark=new Schnitzeljagd(
                 "Krupp-Park","Diese Schnitzeljagd findet im Essener Krupp Park statt.",
                 "ungefähr 15 min","500m","","Einfach",list);

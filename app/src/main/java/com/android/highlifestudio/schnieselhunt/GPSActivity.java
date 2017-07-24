@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.icu.text.LocaleDisplayNames;
 import android.location.Location;
 import android.os.Build;
 import android.os.Handler;
@@ -33,7 +34,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.firebase.messaging.RemoteMessage;
 
 import org.w3c.dom.Text;
 
@@ -166,6 +166,7 @@ public class GPSActivity extends AppCompatActivity
         temp.setLatitude(SLocationArrayList.get(counter).latitude);
         temp.setLongitude(SLocationArrayList.get(counter).longitude);
         float distance = l.distanceTo(temp);
+        Log.d("haha","Location to search: "+temp.getLongitude()+" "+temp.getLatitude());
         Log.d("haha","dintanz: "+distance);
         Log.d("haha", "accuracy (OLD) = " +String.valueOf(accuracy));
         if (accuracy > 25 || accuracy < 5){
@@ -219,6 +220,10 @@ public class GPSActivity extends AppCompatActivity
             imgFile = new File(SLocationArrayList.get(counter).picpath);
         if (imgFile != null && imgFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            if(getResources().getDisplayMetrics().density<=3) {
+                int nh = (int) (bitmap.getHeight() * ((double) 1024 / bitmap.getWidth()));
+                bitmap = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+            }
             rätselImage.setImageBitmap(bitmap);
         }
     }

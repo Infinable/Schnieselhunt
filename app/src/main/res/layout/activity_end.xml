@@ -92,6 +92,6 @@ android:layout_width="match_parent"
 android:layout_height="wrap_content"
     android:fontFamily="sans-serif"
 android:layout_gravity="bottom"
-android:text="Return to Home" />
+android:text="Zurück zum Start" />
 
 </LinearLayout>
