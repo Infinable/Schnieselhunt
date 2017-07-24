@@ -12,12 +12,16 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.Drawable;
 import android.icu.text.LocaleDisplayNames;
 import android.location.Location;
+import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +42,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -105,6 +110,7 @@ public class GPSActivity extends AppCompatActivity
         options.inSampleSize=4;
         if(pictpath==null)
             return;
+
         switch (pictpath){
             case "1":
                 //Bitmap bm=BitmapFactory.decodeResource(getResources(),R.drawable.krupp_park10,options);
@@ -137,8 +143,27 @@ public class GPSActivity extends AppCompatActivity
         imgFile=new File(SLocationArrayList.get(counter).picpath);
         if(imgFile!=null && imgFile.exists()){
             Bitmap bitmap= BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            try {
+                ExifInterface ef= new ExifInterface(imgFile.getAbsolutePath());
+                Matrix m=new Matrix();
+                switch (ef.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED)){
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        m.setRotate(90);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        m.setRotate(180);
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        m.setRotate(270);
+                        break;
+                }
+                bitmap=Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),bitmap.getHeight(),m,true);
+                Log.d("haha","rotation"+ef.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             rätselImage.setImageBitmap(bitmap);
-            rätselImage.setRotation(90);
+            //rätselImage.setRotation(90);
         }
 
 
@@ -220,10 +245,13 @@ public class GPSActivity extends AppCompatActivity
             imgFile = new File(SLocationArrayList.get(counter).picpath);
         if (imgFile != null && imgFile.exists()) {
             Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            Bitmap n;
             if(getResources().getDisplayMetrics().density<=3) {
                 int nh = (int) (bitmap.getHeight() * ((double) 1024 / bitmap.getWidth()));
-                bitmap = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+                n = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
+                rätselImage.setImageBitmap(n);
             }
+            else
             rätselImage.setImageBitmap(bitmap);
         }
     }

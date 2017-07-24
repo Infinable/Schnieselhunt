@@ -10,8 +10,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -246,7 +248,27 @@ public class AddActivity extends AppCompatActivity {
 
             try {
                 Bitmap  bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), Uri.fromFile(photoFile));
-                if(getResources().getDisplayMetrics().density<=3) {
+                try {
+                    ExifInterface ef= new ExifInterface(photoFile.getAbsolutePath());
+                    Matrix m=new Matrix();
+                    switch (ef.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED)){
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            m.setRotate(90);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            m.setRotate(180);
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            m.setRotate(270);
+                            break;
+                    }
+                    bitmap=Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),bitmap.getHeight(),m,true);
+                    Log.d("haha","rotation"+ef.getAttributeInt(ExifInterface.TAG_ORIENTATION,ExifInterface.ORIENTATION_UNDEFINED));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if(getResources().getDisplayMetrics().density<3) {
                     int nh = (int) (bitmap.getHeight() * ((double) 1024 / bitmap.getWidth()));
                     bitmap = Bitmap.createScaledBitmap(bitmap, 1024, nh, true);
                 }
